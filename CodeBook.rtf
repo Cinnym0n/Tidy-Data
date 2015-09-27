@@ -19,10 +19,10 @@ The data used in this project is linked to the course website and was collected 
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 \cf0 The raw data description is available in the \'93UCI HAR Dataset\'94 README.txt file and from:\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-{\field{\*\fldinst{HYPERLINK "http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones"}}{\fldrslt \cf0 http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones}}\
+\cf0 http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones\
 \
 The original raw data was downloaded from:\
-{\field{\*\fldinst{HYPERLINK "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"}}{\fldrslt https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip}}\
+https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip\
 \
 ##Raw Data Files\
 When the file was downloaded and unzipped it produced a directory called \'93UCI HAR Dataset\'94 containing:\
@@ -35,15 +35,16 @@ When the file was downloaded and unzipped it produced a directory called \'93UCI
 \
 directory test contained:\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-\cf0   subdirectory	Inertial Signals (contains 9 files, not used here)	file		subject_test.txt\
+\cf0 	file		subject_test.txt\
 	file		X_test.txt\
 	file		y_test.txt\
+  subdirectory	Inertial Signals (9 files deleted, not used here)\
 \
 directory	train contained:\
-  subdirectory	Inertial Signals (contains 9 files, not used here)\
-	file		subject_train.txt\
-	file		X_train.txt\
-	file		y_train.txt\
+	file		 subject_train.txt\
+	file		 X_train.txt\
+	file		 y_train.txt\
+  subdirectory	 Inertial Signals (9 files deleted, not used here)\
 \
 ###Data file Descriptions and Abbreviations\
 X* = data from X_test.txt & X_train.txt \
@@ -87,26 +88,19 @@ The single column of activity data (Y* files) was conbined with the correspondin
 ???????????????START HERE\
 ??????????????\
 \
-# Merge the the single column of subject data with the corresponding\
-# metric/activity data for the test and training datasets\
-# (i.e. merge Xtest_Ysub with Xtrain_Ysub)\
+Merge the the single column of subject data with the corresponding metric/activity data for the test and training datasets \
+(i.e. merge Xtest_Ysub with Xtrain_Ysub)\
     Xtest_Ysub  <- cbind(subtest, Xtest_Y)\
     Xtrain_Ysub <- cbind(subtrain, Xtrain_Y)\
 \
-# Create a new column in both datasets to hold the informaton for subject type,\
-# (train or test) so this data will not be lost when the datasets are merged\
+Create a new column in both datasets to hold the informaton for subject type, (train or test) so this data will not be lost when the datasets are merged\
     Xtest_Ysub$subject_type  <- replicate(nrow(Xtest_Ysub), "test")\
     Xtrain_Ysub$subject_type <- replicate(nrow(Xtrain_Ysub), "train")\
 \
-# Merge the test and training datasets (each contains subject, activity,\
-# metric, and subject_type data) to create one data frame containing all of\
-# the data (Xall) (i.e. merge Xtest_Ysub with Xtrain_Ysub)\
+Merge the test and training datasets (each contains subject, activity, metric, and subject_type data) to create one data frame containing all of the data (Xall) (i.e. merge Xtest_Ysub with Xtrain_Ysub)\
     Xall  <- full_join(Xtest_Ysub, Xtrain_Ysub)\
 \
-# From the data set containing all of the data (Xall), select only the metrics\
-# containing statistcal means (column names containing "mean") or statistical\
-# standard deviation data (column names containing "std"), while keeping the\
-# the previously added activity and subject data ("subject" and "activity")\
+From the data set containing all of the data (Xall), select only the metrics containing statistcal means (column names containing "mean") or statistical standard deviation data (column names containing "std"), while keeping the previously added activity and subject data ("subject" and "activity")\
     Xall_meanstd <- cbind(Xall$subject, Xall$activity,\
                           select(Xall, contains("mean")),\
                           select(Xall, contains("std"))\

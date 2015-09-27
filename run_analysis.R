@@ -1,37 +1,26 @@
-run_analysis <- function(parameters??) {
+run_analysis <- function() {
 ##Getting and Cleaning Data Coursera Class Project - Tidy-Data
 ## This program uses data collected from the accelerometers from the Samsung
 ##    Galaxy S smartphone. It creates a new dataset as it merges the training
 ##    and the test sets extracting only the measurements on means and standard
 ##    deviations and assigning descriptive activity and variable names.
 ##    It creates a second tidy dataset with the average of each variable for
-##    each activity and each subject. (See CodeBook.md for an in depth
-##    description of the data.)
+##    each activity and each subject.
+##    (See CodeBook.md for a more in depth description of the data.)
 
-# you are being asked to produce a average for each combination of subject,
-#    activity, and variable
+## Requirements for the project are:
+# 1. Merges the training and the test sets to create one data set.
+# 2. Extracts only the measurements on the mean and standard deviation
+#    for each measurement.
+# 3. Uses descriptive activity names to name the activities in the data set
+# 4. Appropriately labels the data set with descriptive variable names.
+# 5. From the data set in step 4, creates a second, independent tidy data set
+#    with the average of each variable for each activity and each subject.
 
-#rm# 1. Merges the training and the test sets to create one data set.
-#rm# 2. Extracts only the measurements on the mean and standard deviation
-#rm#    for each measurement.
-#rm# 3. Uses descriptive activity names to name the activities in the data set
-#rm# 4. Appropriately labels the data set with descriptive variable names.
-#rm# 5. From the data set in step 4, creates a second, independent tidy data set
-#rm#    with the average of each variable for each activity and each subject.
-
-#rm# Data description:
-#rm# http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
-#rm# Data file:
-#rm# https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
-
-#rm# getwd()        ##get working directory - gives directory you are currently in
-#rm# list.files()   ##list directories and files in current directory
 # set working directory
 setwd("/Users/Cindy/Data_Science/datasciencecoursera/Tidy_Data_Repo/tidy-Data")
 
 # Load R packages !!rm!! Check if used these !!rm!!
-#rm# install.packages("data.table")
-#rm# library(data.table)
 install.packages("dplyr")
 library(dplyr)
 install.packages("tidyr")
@@ -42,6 +31,7 @@ library(tidyr)
         dir.create("./data")
     }
 
+## READ IN DATA
 # Download the zip file into subdirectory data saving the download date/time
 # and unzip it into the data subdirectory
 #(Unzipping creates a subdirectory called UCI HAR Dataset)
@@ -52,6 +42,10 @@ library(tidyr)
     unzip("./data/origzipfile.zip", exdir="./data")  #exdir=where to put files
 
 # Read in label files from the highest unzipped directory
+#    features = labels for the metrics (columns) in Xtest and Xtrain
+#    actlabels = labels for the activities (row numeric value code list)
+#                in Ytest and Ytrain
+# "UCI HAR Dataset" is the unzipped directory name containing all data files
    datadir <- "./data/UCI HAR Dataset/"
 
    features <- read.table(file = paste(datadir,"features.txt", sep=""))
@@ -83,6 +77,7 @@ library(tidyr)
     Xtrain <- read.table(file = paste(datadir,"train/X_train.txt", sep=""),
                          col.names = xcolname, check.names = TRUE)
 
+## 1. MERGE DATA
 # Merge the single column of activity data with the corresponding metric data
 # for the test and training datasets
 # (i.e. merge Ytest with Xtest & Ytrain with Xtrain)
@@ -105,25 +100,33 @@ library(tidyr)
 # the data (Xall) (i.e. merge Xtest_Ysub with Xtrain_Ysub)
     Xall  <- full_join(Xtest_Ysub, Xtrain_Ysub)
 
+## 2. EXTRACT MEAN & STANDARD DEVIATION MEASUREMENTS
 # From the data set containing all of the data (Xall), select only the metrics
 # containing statistcal means (column names containing "mean") or statistical
 # standard deviation data (column names containing "std"), while keeping the
-# the previously added activity and subject data ("subject" and "activity")
-    Xall_meanstd <- cbind(Xall$subject, Xall$activity,
-                          select(Xall, contains("mean")),
-                          select(Xall, contains("std"))
-                         )
+# previously added columns activity, subject and subject_type.
+# Name it simply X since it is the final name for the dataset
+    X <- cbind(select(Xall, c(subject, activity, subject_type)),
+               select(Xall, contains("mean")),
+               select(Xall, contains("std"))
+              )
 
+## 3. DESCRIPTIVE ACTIVITY NAMES
+# Change the integers in the activity column to factors with the descriptive
+# names given in activity_labels.txt (read into variable actlabels)
+    X$activity <- actlabel[,2] [match(X$activity, actlabel[,1])]
 
-length(unique(subtrain)$V1)
-[1] 21
-> length(unique(subtest)$V1)
-[1] 9
+## 4. DESCRIPTIVE VARIABLE NAMES
+# Descriptive variable names from the features.txt file were already added
+# the datasets were merged, so just clean up the names:
+#    Change 3 or 2 dots in a row to a single dot (3 dots first, so get them all)
+#    Change front t to "time", and front f to "freq" to indicate the time and
+#        frequency domain variables
+    colnames(X) <- gsub("...", ".", colnames(X), fixed = TRUE)
+    colnames(X) <- gsub("..", ".", colnames(X), fixed = TRUE)
+    colnames(X) <- gsub("^*t", "time", colnames(X))
+    colnames(X) <- gsub("^*f", "freq", colnames(X))
 
-> duplicated(xcolname)
-[477]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-[491]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE
-colnames(Xtestnamed[477])
-# [1] "fBodyGyro.bandsEnergy...17.24.1"
-colnames(Xtestnamed[491])
-# [1] "fBodyGyro.bandsEnergy...17.24.2"
+}
+# you are being asked to produce a average for each combination of subject,
+#    activity, and variable
