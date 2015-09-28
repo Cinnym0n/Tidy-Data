@@ -127,6 +127,24 @@ library(tidyr)
     colnames(X) <- gsub("^*t", "time", colnames(X))
     colnames(X) <- gsub("^*f", "freq", colnames(X))
 
+## X is the final Dataset
+
+## 5. CREATE TIDY AVERAGE DATASET - GROUPED BY ACTIVITY & SUBJECT
+# Make X into a dat frame table and group it by activity and subject
+# Summarize data using the mean of each column, grouped by activity and subject
+# Make it tidier by arranging it by activity & subject and
+#   by adding an "ave." to the front of all the data columns to indicate
+#   they are average values. (This is not done automatically by summarize_each)
+    Xave <- X   %>%
+            tbl_df()  %>%
+            group_by (activity, subject)  %>%
+            summarize_each(funs(mean), 4:89)  %>%
+            arrange(activity, subject)
+
+    colnames(Xave)[3:88] <- paste("ave", colnames(Xave)[3:88], sep = ".")
+
+## Xave is the final tidy average dataset
+#Write out a table to put into project submittal
+write.table(Xave, file="Xave.txt", row.name=FALSE)
+
 }
-# you are being asked to produce a average for each combination of subject,
-#    activity, and variable

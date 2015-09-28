@@ -1,11 +1,12 @@
 # Tidy-Data Repo ReadMe
 
-##Getting and Cleaning Data Coursera Class Project Code Book
-##	- Tidy Accelerometer Data from Samsung Galaxy S smart phones
+##Getting and Cleaning Data Coursera Class Project Code Book - Tidy Accelerometer Data from Samsung Galaxy S smart phones
 
 This code book for the Tidy-Data Project describes the variables, the data, and all transformations performed on the data.
 
 The data used in this project is linked to the course website and was collected from the accelerometers from the Samsung Galaxy S smartphone. 
+
+##Raw Data
 
 ###Raw Data Source
 The raw data description is available in the “UCI HAR Dataset” README.txt file and from:
@@ -14,46 +15,53 @@ http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartpho
 The original raw data was downloaded from:
 https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 
-##Raw Data Files
+###Raw Data Files
 When the file was downloaded and unzipped it produced a directory called “UCI HAR Dataset” containing:
-file		activity_labels.txt
-file		features_info.txt
-file		features.txt
-file		README.txt
-subdirectory	test
-subdirectory	train
+Type        | Name
+------------|---------------------
+file        | activity_labels.txt
+file        | features_info.txt
+file        | features.txt
+file        | README.txt
+subdirectory| test
+subdirectory| train
 
-directory test contained:
-file		subject_test.txt
-file		X_test.txt
-file		y_test.txt
-subdirectory	Inertial Signals (9 files deleted, not used here)
+subdirectory "test" contained:
+Type        | Name
+------------|---------------------
+file        | subject_test.txt
+file        | X_test.txt
+file        | y_test.txt
+subdirectory| Inertial Signals
+(Inertial Signals subdiectory contained 9 files not used here so deleted)
 
-directory	train contained:
-file		 subject_train.txt
-file		 X_train.txt
-file		 y_train.txt
-subdirectory	 Inertial Signals (9 files deleted, not used here)
+subdirectory "train" contained:
+Type        | Name
+------------|---------------------
+file        | subject_train.txt
+file        | X_train.txt
+file        | y_train.txt
+subdirectory| Inertial Signals
+(Inertial Signals subdiectory contained 9 files not used here so deleted)
 
 ###Data file Descriptions and Abbreviations
-X* = data from X_test.txt & X_train.txt 
-561 types of metric data, with thousands of observations
+X* = data from X_test.txt & X_train.txt
+     contains 561 types of metric data, with thousands of observations in each
 
 Y* = data from Y_test.txt & Y_train.txt
-activity data corresponding to each observation in X*
-these are number coded (1-6)
-names corresponding to the numbers are in activity_labels.txt
+     activity data corresponding to each observation in X*
+     these are number coded (1-6)
+     names corresponding to the numbers are in activity_labels.txt
 
 subject* = data from subject_test.txt & subject_train.txt
-subject/participant data corresponding to each 				observation in X*
-These are in the form of integers 1-30
+           subject/participant data corresponding to each observation in X*
+           These are in the form of integers numbered 1-30
 
 ## Changes to the Raw Data
 
 ###Simplified data names (X*, Y*, subject*)
 
-While reading in the data files (X*, Y*, subject*):
-The underscore and extension were removed when naming the objects (example: X_test.txt => Xtest)
+While reading in the data files (X*, Y*, subject*): The underscore and extension were removed when naming the objects (example: X_test.txt => Xtest)
 
 ###Added descriptive column names to data (X*, Y*, subject*)
 
@@ -98,3 +106,12 @@ Changed the integer values in the activity column to factors with the descriptiv
 Descriptive variable names from the features.txt file were already added to the datasets when they were merged, so the names were just cleaned at this point as follows:
 1. Changed 3 or 2 dots/periods in a row to a single dot/period (3 dots first, to be sure to get them all)
 2. Change front t to "time", and front f to "freq" to more clearly indicate the time and       frequency domain variables
+
+###X is the final merged and cleaned dataset
+
+
+## Create a tidy Average Dataset grouped by activity and subject
+Made X into a data frame table then grouped it by activity and subject
+Made it tidier by arranging it by activity & subject and by adding an "ave." to the front of all the data columns to indicate they are average values. (This is not done automatically by summarize_each.)
+
+###Xave is the final tidy average dataset grouped by activity and subject
