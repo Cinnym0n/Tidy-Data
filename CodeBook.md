@@ -17,14 +17,15 @@ https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Datas
 
 ###Raw Data Files
 When the file was downloaded and unzipped it produced a directory called “UCI HAR Dataset” containing:
-Type        | Name
-------------|---------------------
-file        | activity_labels.txt
-file        | features_info.txt
-file        | features.txt
-file        | README.txt
-subdirectory| test
-subdirectory| train
+|Type        | Name                |
+|:------------:|:---------------------:|
+|file        | activity_labels.txt |
+|file        | features_info.txt   |
+|file        | features.txt        |
+|file        | README.txt          |
+|subdirectory| test                |
+|subdirectory| train               |
+
 
 subdirectory "test" contained:
 Type        | Name
