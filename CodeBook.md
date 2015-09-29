@@ -96,7 +96,7 @@ The single column of activity data (Y* files) was conbined with the correspondin
 
 ###Added subject/participant data (subject*) to corresponding metric data (X*)
 The single column of subject data (subject* files) was conbined with the corresponding metric/activity data for the test and training datasets. Dataset names reflect the change:
-  
+
 - Xtest_Y + subtest = Xtest_Ysub
 - Xtrain_Y + subtest = Xtrain_Ysub
 
