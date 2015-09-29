@@ -84,6 +84,12 @@ library(tidyr)
     Xtest_Y  <- cbind(Ytest, Xtest)
     Xtrain_Y <- cbind(Ytrain, Xtrain)
 
+### Note:
+### could have merged all 3 (Xtest, Ytest, subtest) in one command with
+### "join" from t5he plyr package
+### (when all column names match-defaults to left join)
+### OR join_all(Ytest, subtest, Xtest)
+
 # Merge the the single column of subject data with the corresponding
 # metric/activity data for the test and training datasets
 # (i.e. merge Xtest_Ysub with Xtrain_Ysub)
