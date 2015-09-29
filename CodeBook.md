@@ -67,13 +67,13 @@ subject* = data from subject_test.txt & subject_train.txt
 
 ## Changes to the Raw Data
 
-###Simplified data names (X*, Y*, subject*)
+###Simplified data names (X\*, Y\*, subject\*)
 
-While reading in the data files (X*, Y*, subject*): The underscore and extension were removed when naming the objects (example: X_test.txt => Xtest)
+While reading in the data files (X\*, Y\*, subject\*): The underscore and extension were removed when naming the objects (example: X_test.txt => Xtest)
 
-###Added descriptive column names to data (X*, Y*, subject*)
+###Added descriptive column names to data (X\*, Y\*, subject\*)
 
-When reading in the data files (X*, Y*, subject*):
+When reading in the data files (X\*, Y\*, subject\*):
 column names were added to make the data more readable. 
 
 The X* metric data files column names were taken from the second column of the “features.txt” file.  
@@ -88,13 +88,13 @@ The Y_t* activity data files had only one column, and it was labeled “activity
 
 The subject_t* subject/participant files had only one column, and it was labeled “subject”.
 
-###Added activity data (Y*) to corresponding metric data (X*)
+###Added activity data (Y\*) to corresponding metric data (X\*)
 The single column of activity data (Y* files) was conbined with the corresponding metric data (X*) for the test and training datasets. Dataset names reflect the change:   
 
 - Ytest + Xtest = Xtest_Y 
 - Ytrain + Xtrain = Xtrain_Y
 
-###Added subject/participant data (subject*) to corresponding metric data (X*)
+###Added subject/participant data (subject\*) to corresponding metric data (X\*)
 The single column of subject data (subject* files) was conbined with the corresponding metric/activity data for the test and training datasets. Dataset names reflect the change:
 
 - Xtest_Y + subtest = Xtest_Ysub
@@ -122,13 +122,14 @@ Descriptive variable names from the features.txt file were already added to the 
 
 1. Changed 3 or 2 dots/periods in a row to a single dot/period (3 dots first, to be sure to get them all)
 
-2. Change front t to "time", and front f to "freq" to more clearly indicate the time and       frequency domain variables
+2. Change front "t" to "time", and front "f" to "freq" to more clearly indicate the time and frequency domain variables
 
-####X = the final merged and cleaned dataset
+#####X = the final merged and cleaned dataset
 
 
 ## Create a tidy Average Dataset grouped by activity and subject
 Made X into a data frame table then grouped it by activity and subject
+
 Made it tidier by arranging it by activity & subject and by adding an "ave." to the front of all the data columns to indicate they are average values. (This is not done automatically by summarize_each.)
 
-####Xave = the final tidy average dataset grouped by activity and subject
+#####Xave = the final tidy average dataset, grouped by activity and subject
