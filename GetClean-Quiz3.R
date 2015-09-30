@@ -105,8 +105,45 @@ quantile(pic, probs = c(0, .30, .50, .80, 1), na.rm=TRUE)
 #       190 matches, 13th country is Spain
 #       189 matches, 13th country is Spain
 
+library(dplyr)
 
+#download gross domestic product data
+gdpurl="https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FGDP.csv"
+download.file(gdpurl, destfile="./data/gdp.csv", method="curl")
+dateDownloadGdp <- date()
 
+#download education data
+edu="https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FEDSTATS_Country.csv"
+download.file(edu, destfile="./data/ed.csv", method="curl")
+dateDownloadEd <- date()
+
+#read data into dataframes from gdp & ed
+gdp <- read.csv("./data/gdp.csv", skip=3, header=TRUE, stringsAsFactors=FALSE)
+ed <- read.csv("./data/ed.csv")
+
+##### clean up gdp:
+# Remove Non-ranked countries and non-data rows by specifying only the rows
+# & columns with good data (found by looking at file)
+gdp2 <- gdp[2:191, c(1:2, 4:5)]
+
+# Rename the columns to be more descriptive
+gdp3 <- rename(gdp2, CountryCode = X, Economy_Country = Economy,
+               GDP_millUSdol = US.dollars. )
+> names(gdp3)
+#[1] "CountryCode"   "Ranking"   "Economy_Country"    "GDP_millUSdol"
+
+#Find column names in common
+intersect(names(gdp3), names(ed))
+#[1] "CountryCode"
+
+#merge the data
+gdped <- merge(gdp3, ed, by.x = "CountryCode", by.y= "CountryCode")
+dim(gdped)
+#ANS:189
+
+gdped$Ranking <- as.integer(gdped$Ranking)
+gdpedAr <- arrange(gdped, desc(as.integer(Ranking)))
+#ANS: St. Kitts and Nevis
 
 ## Quiz Question 4 -  ###############################################
 #What is the average GDP ranking for the "High income: OECD" and "High income:
@@ -115,10 +152,36 @@ quantile(pic, probs = c(0, .30, .50, .80, 1), na.rm=TRUE)
 #            23, 45            23.966667, 30.91304
 
 
+gdpedAr2 <- arrange(gdped, Income.Group)
 
+gdpedIn <- group_by(gdped, Income.Group)
+
+summarize(gdpedIn, AveRank = mean(Ranking))
+#Source: local data frame [5 x 2]
+#Income.Group   AveRank
+#(fctr)     (dbl)
+#1 High income: nonOECD  91.91304
+#2    High income: OECD  32.96667
+#3           Low income 133.72973
+#4  Lower middle income 107.70370
+#5  Upper middle income  92.13333
+
+#ANS: 32.96667, 91.91304
 
 ## Quiz Question 5 -  ###############################################
 #Cut the GDP ranking into 5 separate quantile groups. Make a table versus
 #Income.Group. How many countries are Lower middle income but among the 38
 #nations with highest GDP?
 #ANS:    12    18    0    5
+
+quantile(gdpedIn$Ranking, probs = c(0, .20, .40, .60, .80,  1), na.rm=TRUE)
+
+gdpedRL<- gdped %>%
+          mutate(Rank_Level =
+                     ifelse(Ranking >= 152.4, "80_100",
+                     ifelse(Ranking >= 113.8 & Ranking < 152.4, "60_80",
+                     ifelse(Ranking >= 76.2 & Ranking < 113.8, "40_60",
+                     ifelse(Ranking >= 38.6 & Ranking < 76.2, "20_40",
+                            "0_20")))))
+mutate(gdped, RankGroup =
+summarize(gdpedIn, )
