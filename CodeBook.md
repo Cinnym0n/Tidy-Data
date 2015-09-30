@@ -1,4 +1,4 @@
-# Tidy-Data Repo ReadMe
+# Tidy-Data Repo Code Book
 
 ##Getting and Cleaning Data Coursera Class Project Code Book - Tidy Accelerometer Data from Samsung Galaxy S smart phones
 
